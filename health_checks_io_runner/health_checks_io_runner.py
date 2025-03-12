@@ -6,10 +6,10 @@ from __future__ import annotations
 import logging
 import socket
 import urllib.request
-from dataclasses import dataclass
 from enum import Enum
 from typing import Callable
 
+from health_checks_io_runner.script_status import ScriptStatus
 from src.config.config import CONFIG
 
 logger = logging.getLogger(__name__)
@@ -116,13 +116,3 @@ class HealthChecksPingType(Enum):
     START = "START"
     SUCCESS = ""
     FAIL = "FAIL"
-
-
-@dataclass
-class ScriptStatus:
-    """
-    Represents that status of this script run.
-    """
-
-    is_success: bool
-    message: str = ""
