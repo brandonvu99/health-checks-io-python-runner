@@ -1,5 +1,3 @@
-# Example Package
+# Healthchecks.io Python Runner
 
-This is a simple example package. You can use
-[GitHub-flavored Markdown](https://guides.github.com/features/mastering-markdown/)
-to write your content.
+Just a simple wrapper around the Start, Success, and Failure endpoints of the [Healthchecks.io ping api](https://healthchecks.io/docs/http_api/).
