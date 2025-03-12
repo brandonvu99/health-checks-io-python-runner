@@ -40,6 +40,8 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
         Returns:
             bool: True if any ping was successful, false otherwise.
         """
+        # TODO(): add a check that the url reaches something before this to at least
+        # let the user explicitly know.
         HealthChecksIoRunner.__send_status(
             HealthChecksPingType.START, health_checks_io_base_url
         )
