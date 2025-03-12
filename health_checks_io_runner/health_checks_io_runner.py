@@ -10,7 +10,6 @@ from enum import Enum
 from typing import Callable
 
 from health_checks_io_runner.script_status import ScriptStatus
-from src.config.config import CONFIG
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +23,7 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
     @staticmethod
     def run(
         function_to_run: Callable[..., ScriptStatus],
-        health_checks_io_base_url: str = CONFIG.config_file_values.health_checks_io_base_url,
+        health_checks_io_base_url: str,
     ) -> bool:
         """
         Sends a "start" ping to the healthchecks.io, runs {function_to_run},
@@ -69,7 +68,7 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
     @staticmethod
     def __send_status(
         ping_type: HealthChecksPingType,
-        health_checks_io_base_url: str = CONFIG.config_file_values.health_checks_io_base_url,
+        health_checks_io_base_url: str,
         message: str = None,
     ) -> bool:
         """
