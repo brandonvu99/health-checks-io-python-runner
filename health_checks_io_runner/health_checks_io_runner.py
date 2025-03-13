@@ -1,6 +1,5 @@
 """Module for HealthChecksRunner."""
 
-# TODO(): move this entire file into its own git repo that can be cloned by all your scripts.
 from __future__ import annotations
 
 import logging
