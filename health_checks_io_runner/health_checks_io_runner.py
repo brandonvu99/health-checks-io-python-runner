@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import socket
+import urllib.error
 import urllib.request
 from enum import Enum
 from typing import Callable
@@ -25,22 +26,31 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
         health_checks_io_base_url: str,
     ) -> bool:
         """
-        Sends a "start" ping to the healthchecks.io, runs {function_to_run},
+        Sends a "start" ping to the Healthchecks.io, runs {function_to_run},
         and sends either:
-            1) a "success" ping to healthchecks.io if the {function_to_run}
+            1) a "success" ping to Healthchecks.io if the {function_to_run}
                returned a successful {ScriptStatus}, or
-            2) a "failure" ping to healthchecks.io if the {function_to_run}
+            2) a "failure" ping to Healthchecks.io if the {function_to_run}
                returned a failure {ScriptStatus}.
 
         Arguments:
             function_to_run (Callable): a function that returns a ScriptStatus
-            health_checks_io_base_url (str): base url for your healthchecks.io instance
+            health_checks_io_base_url (str): base url for your Healthchecks.io instance
                                              (e.g. "http://healthchecksio.myhomeserver.com")
         Returns:
             bool: True if any ping was successful, false otherwise.
         """
-        # TODO(): add a check that the url reaches something before this to at least
-        # let the user explicitly know.
+        if not HealthChecksIoRunner.__base_url_points_to_a_real_running_instance(
+            health_checks_io_base_url
+        ):
+            logger.error(
+                "The given [%s] does not point to a real running instance of Healthschecks.io. The supplied [%s] will still be ran, but no Healthchecks.io pings will be sent.",
+                f"{health_checks_io_base_url=}",
+                f"{function_to_run=}",
+            )
+            function_to_run()
+            return False
+
         HealthChecksIoRunner.__send_status(
             HealthChecksPingType.START, health_checks_io_base_url
         )
@@ -63,6 +73,45 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
             return HealthChecksIoRunner.__send_status(
                 HealthChecksPingType.FAIL, health_checks_io_base_url, str(e)
             )
+
+    @staticmethod
+    def __base_url_points_to_a_real_running_instance(
+        health_checks_io_base_url: str,
+    ) -> bool:
+        """
+        Checks if getting {health_checks_io_base_url} will return expected errors for a real
+        running instance of Healthchecks.io.
+
+        Returns:
+            (bool): True if and only if the given {health_checks_io_base_url} points to a real
+                    running instance of Healthchecks.io.
+        """
+
+        def base_url_points_to_health_checks_io_home_page() -> bool:
+            with urllib.request.urlopen(health_checks_io_base_url) as f:
+                response = f.read().decode("utf8")
+            response_has_github_link_html = (
+                '<a href="https://github.com/healthchecks/healthchecks">github</a>'
+                in response
+            )
+            return response_has_github_link_html
+
+        def base_url_with_random_check_uuid_returns_404() -> bool:
+            try:
+                with urllib.request.urlopen("http://192.168.0.70:8529/sadfff") as f:
+                    pass
+                return False
+            except urllib.error.HTTPError as e:
+                response_has_health_checks_error_string = (
+                    "Using the URLconf defined in <code>hc.urls</code>,"
+                    in str(e.read().decode("utf8"))
+                )
+                return response_has_health_checks_error_string
+
+        return (
+            base_url_points_to_health_checks_io_home_page()
+            and base_url_with_random_check_uuid_returns_404()
+        )
 
     @staticmethod
     def __send_status(
