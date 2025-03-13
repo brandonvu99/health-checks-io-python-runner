@@ -65,8 +65,6 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
                 HealthChecksPingType.FAIL, health_checks_io_base_url, str(e)
             )
 
-    # TODO(): expose this function? right now, it's essentially a private method bc
-    # it's a staticmethod and the __ name prefix. name mangling makes it essentially private.
     @staticmethod
     def __send_status(
         ping_type: HealthChecksPingType,
