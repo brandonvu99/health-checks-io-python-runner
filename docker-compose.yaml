@@ -1,0 +1,9 @@
+services:
+  health-checks-io-runner-unit-tests:
+    build:
+      context: ./
+      dockerfile: Dockerfile.tests.unit
+    container_name: health-checks-io-runner-unit-tests
+    volumes:
+      - ./coverage-reports/unit:/coverage-reports
+      - ./test-output/unit:/test-output

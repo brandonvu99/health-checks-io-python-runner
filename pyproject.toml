@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-addopts = "-ra --cov=src --cov-report html"
+addopts = "-ra --cov=health_checks_io_runner --cov-report html"
 log_cli_level = "DEBUG"
 minversion = "8.3.4"
 

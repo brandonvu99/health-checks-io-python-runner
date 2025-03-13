@@ -1,0 +1,13 @@
+FROM python:3.13.2-slim-bullseye
+
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+COPY requirements.tests.unit.txt requirements.tests.unit.txt
+RUN pip install --no-cache-dir -r requirements.tests.unit.txt
+
+COPY health_checks_io_runner/ health_checks_io_runner/
+COPY tests/unit/ tests/
+COPY pyproject.toml pyproject.toml
+
+CMD [ "pytest" ]
