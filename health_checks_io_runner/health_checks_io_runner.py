@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
     """
     Class that will run a function that returns a {ScriptStatus},
-    and send that status to a healthchecks.io instance.
+    and send that status to a HealthChecks.io instance.
     """
 
     @staticmethod
@@ -26,19 +26,21 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
         health_checks_io_base_url: str,
     ) -> bool:
         """
-        Sends a "start" ping to the Healthchecks.io, runs {function_to_run},
-        and sends either:
-            1) a "success" ping to Healthchecks.io if the {function_to_run}
+        (1) Sends a "start" ping to the Healthchecks.io.
+        (2) Runs {function_to_run}.
+        (3) Finally sends either:
+            (a) a "success" ping to Healthchecks.io if the {function_to_run}
                returned a successful {ScriptStatus}, or
-            2) a "failure" ping to Healthchecks.io if the {function_to_run}
+            (b) a "failure" ping to Healthchecks.io if the {function_to_run}
                returned a failure {ScriptStatus}.
 
         Arguments:
             function_to_run (Callable): a function that returns a ScriptStatus
             health_checks_io_base_url (str): base url for your Healthchecks.io instance
                                              (e.g. "http://healthchecksio.myhomeserver.com")
+
         Returns:
-            bool: True if any ping was successful, false otherwise.
+            bool: True if any ping was successful, False otherwise.
         """
         HealthChecksIoRunner.__send_status(
             HealthChecksPingType.START, health_checks_io_base_url
@@ -70,15 +72,16 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
         message: str = None,
     ) -> bool:
         """
-        Pings the healthchecks.io with some status.
+        Pings the Healthchecks.io instance with some status.
 
         Arguments:
             ping_type (HealthChecksPingType): what type of ping to send
-            health_checks_io_base_url (str): base url for your healthchecks.io instance
+            health_checks_io_base_url (str): base url for your Healthchecks.io instance
                                              (e.g. "http://healthchecksio.myhomeserver.com")
             message (str): a message to send with the ping
+
         Returns:
-            bool: True if the ping was successful, false otherwise.
+            bool: True if the ping was successful, False otherwise.
         """
         if ping_type == HealthChecksPingType.UNKNOWN:
             raise ValueError(f"{HealthChecksPingType.UNKNOWN} is not supported.")
@@ -105,8 +108,9 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
 
 class HealthChecksPingType(Enum):
     """
-    Enum representing the types of pings we can do for healthchecks.io.
-    Values are the endpoint name in healthchecks.io for each ping type, except for UNKNOWN.
+    Enum representing the types of pings we can do for Healthchecks.io.
+    For each ping type enum, the values are the endpoint name in the Healthchecks.io pinging API,
+    except for UNKNOWN which is NOT an endpoint name.
     """
 
     UNKNOWN = 0
