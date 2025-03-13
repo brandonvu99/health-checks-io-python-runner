@@ -8,12 +8,13 @@ from unittest.mock import call, patch
 
 import pytest
 from assertpy import assert_that
-from src.health_checks_io_runner import health_checks_io_runner
-from src.health_checks_io_runner.health_checks_io_runner import (
+
+from health_checks_io_runner import health_checks_io_runner
+from health_checks_io_runner.health_checks_io_runner import (
     HealthChecksIoRunner,
     HealthChecksPingType,
-    ScriptStatus,
 )
+from health_checks_io_runner.script_status import ScriptStatus
 
 
 class HealthChecksRunnerTest(unittest.TestCase):
@@ -42,7 +43,11 @@ class HealthChecksRunnerTest(unittest.TestCase):
                     call(
                         f"{self.FAKE_HEALTH_CHECKS_IO_URL}/START", timeout=10, data=None
                     ),
-                    call(f"{self.FAKE_HEALTH_CHECKS_IO_URL}/", timeout=10, data=self.SUCCESS_MESSAGE.encode()),
+                    call(
+                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/",
+                        timeout=10,
+                        data=self.SUCCESS_MESSAGE.encode(),
+                    ),
                 ]
             )
 
@@ -154,7 +159,7 @@ class HealthChecksRunnerTest(unittest.TestCase):
     def test____send_status__ping_type_unknown__raises_value_error(self):
         with pytest.raises(ValueError) as excinfo:
             HealthChecksIoRunner._HealthChecksIoRunner__send_status(  # pylint: disable=protected-access
-                HealthChecksPingType.UNKNOWN
+                HealthChecksPingType.UNKNOWN, "http://unused-url-for-this-test"
             )
 
         assert_that(str(excinfo.value)).contains(
