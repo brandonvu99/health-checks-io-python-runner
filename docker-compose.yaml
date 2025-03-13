@@ -6,4 +6,3 @@ services:
     container_name: health-checks-io-runner-unit-tests
     volumes:
       - ./coverage-reports/unit:/coverage-reports
-      - ./test-output/unit:/test-output
