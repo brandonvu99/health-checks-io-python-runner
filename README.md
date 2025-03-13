@@ -35,3 +35,8 @@ if __name__ == "__main__":
     main()
 
 ```
+
+# How to run tests with docker
+```
+docker compose up --no-deps --build
+```
