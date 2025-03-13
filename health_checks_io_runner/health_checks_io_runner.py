@@ -40,17 +40,6 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
         Returns:
             bool: True if any ping was successful, false otherwise.
         """
-        if not HealthChecksIoRunner.__base_url_points_to_a_real_running_instance(
-            health_checks_io_base_url
-        ):
-            logger.error(
-                "The given [%s] does not point to a real running instance of Healthschecks.io. The supplied [%s] will still be ran, but no Healthchecks.io pings will be sent.",
-                f"{health_checks_io_base_url=}",
-                f"{function_to_run=}",
-            )
-            function_to_run()
-            return False
-
         HealthChecksIoRunner.__send_status(
             HealthChecksPingType.START, health_checks_io_base_url
         )
@@ -73,45 +62,6 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
             return HealthChecksIoRunner.__send_status(
                 HealthChecksPingType.FAIL, health_checks_io_base_url, str(e)
             )
-
-    @staticmethod
-    def __base_url_points_to_a_real_running_instance(
-        health_checks_io_base_url: str,
-    ) -> bool:
-        """
-        Checks if getting {health_checks_io_base_url} will return expected errors for a real
-        running instance of Healthchecks.io.
-
-        Returns:
-            (bool): True if and only if the given {health_checks_io_base_url} points to a real
-                    running instance of Healthchecks.io.
-        """
-
-        def base_url_points_to_health_checks_io_home_page() -> bool:
-            with urllib.request.urlopen(health_checks_io_base_url) as f:
-                response = f.read().decode("utf8")
-            response_has_github_link_html = (
-                '<a href="https://github.com/healthchecks/healthchecks">github</a>'
-                in response
-            )
-            return response_has_github_link_html
-
-        def base_url_with_random_check_uuid_returns_404() -> bool:
-            try:
-                with urllib.request.urlopen("http://192.168.0.70:8529/sadfff") as f:
-                    pass
-                return False
-            except urllib.error.HTTPError as e:
-                response_has_health_checks_error_string = (
-                    "Using the URLconf defined in <code>hc.urls</code>,"
-                    in str(e.read().decode("utf8"))
-                )
-                return response_has_health_checks_error_string
-
-        return (
-            base_url_points_to_health_checks_io_home_page()
-            and base_url_with_random_check_uuid_returns_404()
-        )
 
     @staticmethod
     def __send_status(
