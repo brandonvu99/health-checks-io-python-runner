@@ -41,7 +41,7 @@ class HealthChecksRunnerTest(unittest.TestCase):
             mocked_urlopen.assert_has_calls(
                 [
                     call(
-                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/START", timeout=10, data=None
+                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/start", timeout=10, data=None
                     ),
                     call(
                         f"{self.FAKE_HEALTH_CHECKS_IO_URL}/",
@@ -69,10 +69,10 @@ class HealthChecksRunnerTest(unittest.TestCase):
             mocked_urlopen.assert_has_calls(
                 [
                     call(
-                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/START", timeout=10, data=None
+                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/start", timeout=10, data=None
                     ),
                     call(
-                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/FAIL",
+                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/fail",
                         timeout=10,
                         data=self.FAILURE_MESSAGE.encode(),
                     ),
@@ -100,10 +100,10 @@ class HealthChecksRunnerTest(unittest.TestCase):
             mocked_urlopen.assert_has_calls(
                 [
                     call(
-                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/START", timeout=10, data=None
+                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/start", timeout=10, data=None
                     ),
                     call(
-                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/FAIL",
+                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/fail",
                         timeout=10,
                         data=self.EXCEPTION_MESSAGE.encode(),
                     ),
@@ -128,7 +128,7 @@ class HealthChecksRunnerTest(unittest.TestCase):
             mocked_urlopen.assert_has_calls(
                 [
                     call(
-                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/START", timeout=10, data=None
+                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/start", timeout=10, data=None
                     ),
                 ]
             )
@@ -151,7 +151,7 @@ class HealthChecksRunnerTest(unittest.TestCase):
             mocked_urlopen.assert_has_calls(
                 [
                     call(
-                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/START", timeout=10, data=None
+                        f"{self.FAKE_HEALTH_CHECKS_IO_URL}/start", timeout=10, data=None
                     ),
                 ]
             )

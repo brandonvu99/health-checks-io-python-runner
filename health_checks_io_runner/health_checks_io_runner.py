@@ -114,6 +114,6 @@ class HealthChecksPingType(Enum):
     """
 
     UNKNOWN = 0
-    START = "START"
+    START = "start"
     SUCCESS = ""
-    FAIL = "FAIL"
+    FAIL = "fail"
