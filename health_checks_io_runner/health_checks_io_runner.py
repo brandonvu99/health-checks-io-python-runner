@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import socket
+import traceback
 import urllib.error
 import urllib.request
 from enum import Enum
@@ -61,8 +62,10 @@ class HealthChecksIoRunner:  # pylint: disable=too-few-public-methods
                 script_status.message,
             )
         except Exception as e:  # pylint: disable=broad-exception-caught
+            message = f"{e}\n{traceback.format_exc()}"
+            logger.error(message)
             return HealthChecksIoRunner.__send_status(
-                HealthChecksPingType.FAIL, health_checks_io_base_url, str(e)
+                HealthChecksPingType.FAIL, health_checks_io_base_url, message
             )
 
     @staticmethod

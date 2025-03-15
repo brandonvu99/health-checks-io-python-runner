@@ -8,7 +8,6 @@ from unittest.mock import call, patch
 
 import pytest
 from assertpy import assert_that
-
 from health_checks_io_runner import health_checks_io_runner
 from health_checks_io_runner.health_checks_io_runner import (
     HealthChecksIoRunner,
@@ -105,7 +104,7 @@ class HealthChecksRunnerTest(unittest.TestCase):
                     call(
                         f"{self.FAKE_HEALTH_CHECKS_IO_URL}/fail",
                         timeout=10,
-                        data=self.EXCEPTION_MESSAGE.encode(),
+                        data='test exception message\nTraceback (most recent call last):\n  File "/app/health_checks_io_runner/health_checks_io_runner.py", line 51, in run\n    script_status = function_to_run()\n  File "/app/tests/health_checks_io_runner/test_health_checks_io_runner.py", line 94, in <lambda>\n    lambda: raise_exception(self.EXCEPTION_MESSAGE),\n            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/app/tests/health_checks_io_runner/test_health_checks_io_runner.py", line 85, in raise_exception\n    raise Exception(exception_message)  # pylint: disable=broad-exception-raised\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nException: test exception message\n'.encode(),  # pylint: disable=line-too-long
                     ),
                 ]
             )
