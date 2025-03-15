@@ -28,7 +28,7 @@ def my_work() -> ScriptStatus:
 
 
 def main():
-    HealthChecksIoRunner.run(my_work)
+    HealthChecksIoRunner.run(my_work, "http://myhealthchecksioinstance.com/ping/check-uuid")
 
 
 if __name__ == "__main__":
