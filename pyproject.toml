@@ -1,3 +1,14 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "health_checks_io_python_runner"
+version = "0.0.0"
+dynamic = ["dependencies"]
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
 [tool.pytest.ini_options]
 addopts = "-ra --cov=health_checks_io_runner --cov-report html"
 log_cli_level = "DEBUG"
